@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+then
+ echo "Missing out port!"
+ exit 1
+fi
+
+APP=$(lsof -n -i4TCP:$1 | awk '{print $1}'|sed '2q;d')
+PID=$(lsof -n -i4TCP:$1 | awk '{print $2}'|sed '2q;d')
+if [ -n "$PID" ]
+then 
+  kill -9 $PID
+  echo "$APP running on $1 has been stopped."
+else 
+  echo "Sorry,nothing running on this port."
+fi
